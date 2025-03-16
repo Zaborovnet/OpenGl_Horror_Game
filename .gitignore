@@ -1,0 +1,13 @@
+# .gitignore для C++
+build/
+*.o
+*.user
+*.pro.user
+*.out
+*.exe
+*.a
+*.so
+*.dll
+*combined.txt
+.vscode/
+.idea/
