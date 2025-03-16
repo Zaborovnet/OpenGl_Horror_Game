@@ -210,7 +210,6 @@ void Game::updatePlayerPosition() {
   update();
 }
 
-
 void Game::initEnvironmentalSystems() {
   // Таймер для атмосферных эффектов (каждые 3 сек)
   connect(&m_ambienceTimer, &QTimer::timeout, this, &Game::updateAmbience);
