@@ -9,5 +9,7 @@ build/
 *.so
 *.dll
 *combined.txt
+*OpenGL_Game.pro.user
+OpenGL_Game.pro.user
 .vscode/
 .idea/

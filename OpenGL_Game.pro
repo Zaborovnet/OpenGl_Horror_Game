@@ -7,20 +7,20 @@ TARGET = NightStoreHorror
 TEMPLATE = app
 
 SOURCES += main.cpp \
-           Environment.cpp \
-           Game.cpp \
            MainWindow.cpp \
-           Shader.cpp \
-           SoundEngine.cpp \
-           TextureGenerator.cpp
+           audio/SoundEngine.cpp \
+           core/Environment.cpp \
+           core/Game.cpp \
+           rendering/Shader.cpp \
+           rendering/TextureGenerator.cpp
 
 HEADERS  += \
-            Environment.h \
-            Game.h \
             MainWindow.h \
-            Shader.h \
-            SoundEngine.h \
-            TextureGenerator.h
+            audio/SoundEngine.h \
+            core/Environment.h \
+            core/Game.h \
+            rendering/Shader.h \
+            rendering/TextureGenerator.h
 
 FORMS    += MainWindow.ui
 
@@ -35,3 +35,5 @@ QMAKE_CXXFLAGS += -std=c++11
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=

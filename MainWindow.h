@@ -7,7 +7,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QMainWindow>
-#include "Game.h"
+#include "core/Game.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
