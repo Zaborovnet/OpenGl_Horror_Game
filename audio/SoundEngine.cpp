@@ -22,6 +22,18 @@ std::vector<float> SoundEngine::generateCreak(int samples) {
   return buffer;
 }
 
+std::vector<float> SoundEngine::generateHeartbeat(int samples) {
+  std::vector<float> buffer(samples);
+  static float phase = 0.0f;
+  for(int i = 0; i < samples; ++i) {
+      // Имитация биения сердца
+      float heartbeat = (i % 44100 < 22050) ? 0.5f : 0.0f; // 1 Гц
+      buffer[i] = heartbeat * std::sin(phase * 2 * M_PI * 1.0f); // 1 Гц
+      phase += 0.0001f;
+    }
+  return buffer;
+}
+
 float SoundEngine::noise(float phase) {
   return 2.0f * (std::rand() / (float)RAND_MAX) - 1.0f;
 }

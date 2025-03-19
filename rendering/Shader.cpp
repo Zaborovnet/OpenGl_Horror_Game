@@ -17,6 +17,11 @@ void Shader::loadShaders() {
         attribute vec3 position;
         attribute vec2 texCoord;
         varying vec2 fragTexCoord;
+
+        uniform mat4 model; // Матрица модели
+        uniform mat4 view; // Матрица вида
+        uniform mat4 projection; // Матрица проекции
+
         void main() {
             fragTexCoord = texCoord;
             gl_Position = gl_ModelViewProjectionMatrix * vec4(position, 1.0);

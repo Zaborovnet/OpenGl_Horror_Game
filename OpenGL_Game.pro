@@ -11,6 +11,7 @@ SOURCES += main.cpp \
            audio/SoundEngine.cpp \
            core/Environment.cpp \
            core/Game.cpp \
+           core/PlayerState.cpp \
            rendering/Shader.cpp \
            rendering/TextureGenerator.cpp
 
@@ -19,6 +20,7 @@ HEADERS  += \
             audio/SoundEngine.h \
             core/Environment.h \
             core/Game.h \
+            core/PlayerState.h \
             rendering/Shader.h \
             rendering/TextureGenerator.h
 

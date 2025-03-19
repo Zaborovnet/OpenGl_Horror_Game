@@ -6,7 +6,7 @@ class SoundEngine {
 public:
   static std::vector<float> generateRain(int samples);
   static std::vector<float> generateCreak(int samples);
-  static std::vector<float> generateHeartbeat(int samples);
+  static std::vector<float> generateHeartbeat(int samples); // Новый метод
 
 private:
   static float noise(float phase);

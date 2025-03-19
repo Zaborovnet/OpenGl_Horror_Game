@@ -47,3 +47,41 @@ void TextureGenerator::generateFloorTexture(unsigned int &textureID, int width, 
 
   qDebug() << "Floor texture generated"; // Отладка
 }
+
+void TextureGenerator::generateShelfTexture(unsigned int &textureID, int width, int height) {
+  unsigned char *data = new unsigned char[width * height * 3]; // RGB
+  for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+          // Простая текстура для полок
+          data[(y * width + x) * 3] = 150; // Светло-серый
+          data[(y * width + x) * 3 + 1] = 100; // Серый
+          data[(y * width + x) * 3 + 2] = 50; // Темно-серый
+        }
+    }
+
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  delete[] data;
+}
+
+void TextureGenerator::generateCounterTexture(unsigned int &textureID, int width, int height) {
+  unsigned char *data = new unsigned char[width * height * 3]; // RGB
+  for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+          // Простая текстура для касс
+          data[(y * width + x) * 3] = 200; // Светло-коричневый
+          data[(y * width + x) * 3 + 1] = 150; // Коричневый
+          data[(y * width + x) * 3 + 2] = 100; // Темно-коричневый
+        }
+    }
+
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  delete[] data;
+}

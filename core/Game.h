@@ -11,6 +11,7 @@
 
 #include "core/Environment.h"
 #include "audio/SoundEngine.h"
+#include "PlayerState.h"
 
 
 #include<GL/glu.h>
@@ -37,6 +38,7 @@ class Game : public QOpenGLWidget, protected QOpenGLFunctions {
   void setupScene();
   void renderGame();
   void updatePlayerPosition();
+  void renderQuad(float x, float y, float z, float width, float height);
 
   void initEnvironmentalSystems();
   void updateAmbience();
@@ -45,6 +47,7 @@ class Game : public QOpenGLWidget, protected QOpenGLFunctions {
   SoundEngine m_soundEngine;
   QTimer m_ambienceTimer;
   std::vector<float> m_audioBuffer;
+  PlayerState m_playerState; // Объект для управления состоянием игрока
 
   Shader *shader;
   float playerX;
@@ -58,6 +61,8 @@ class Game : public QOpenGLWidget, protected QOpenGLFunctions {
 
   unsigned int floorTextureID;
   unsigned int wallTextureID;
+  unsigned int shelfTextureID; // Текстура для полок
+  unsigned int counterTextureID; // Текстура для касс
 
   float cameraYaw;   // Угол поворота по оси Y
   float cameraPitch; // Угол поворота по оси X

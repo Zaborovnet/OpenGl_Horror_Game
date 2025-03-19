@@ -3,10 +3,10 @@
 #include <ctime>
 
 Environment::Environment() :
-                              weatherIntensity(0.85f),
-                              lightFlickerTimer(0.0f),
-                              fogDensity(0.02f),
-                              ambientLight(0.4f, 0.4f, 0.5f)
+  weatherIntensity(0.85f),
+  lightFlickerTimer(0.0f),
+  fogDensity(0.02f),
+  ambientLight(0.4f, 0.4f, 0.5f)
 {
   std::srand(std::time(nullptr));
 }

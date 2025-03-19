@@ -18,18 +18,22 @@ Game::~Game() {
 }
 
 void Game::initializeGL() {
-  initializeOpenGLFunctions();
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_TEXTURE_2D); // Включаем использование текстур
-  shader->loadShaders();
-  setupScene(); // Настройка сцены
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Темный фон
+  initializeOpenGLFunctions(); // Это важно для инициализации OpenGL функций
+  glEnable(GL_DEPTH_TEST); // Включение тестирования глубины
+  glEnable(GL_TEXTURE_2D); // Включение текстур
 
+  shader->loadShaders(); // Загрузка шейдеров
+  setupScene(); // Настройка сцены
+
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Установка цвета фона
 }
+
 
 void Game::setupScene() {
   TextureGenerator::generateFloorTexture(floorTextureID, 1024, 1024);
   TextureGenerator::generateWallTexture(wallTextureID, 256, 256);
+  TextureGenerator::generateShelfTexture(shelfTextureID, 256, 256); // Добавляем текстуру полок
+  TextureGenerator::generateCounterTexture(counterTextureID, 256, 256); // Добавляем текстуру касс
 }
 
 void Game::resizeGL(int w, int h) {
@@ -57,7 +61,6 @@ void Game::paintGL() {
   float lightIntensity = lightsOn ? 0.8f : 0.2f;
   glClearColor(0.1f * lightIntensity, 0.1f * lightIntensity, 0.1f * lightIntensity, 1.0f);
 
-
   // Установите матрицу вида
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -79,39 +82,62 @@ void Game::paintGL() {
 }
 
 void Game::renderGame() {
-    // Рендеринг пола
-    shader->getProgram()->setUniformValue("texture", 0);
-    glBindTexture(GL_TEXTURE_2D, floorTextureID);
+  // Рендеринг пола
+  shader->getProgram()->setUniformValue("texture", 0);
+  glBindTexture(GL_TEXTURE_2D, floorTextureID);
 
-    GLfloat floorVertices[] = {
-        -5.0f, 0.0f, -5.0f,  0.0f, 0.0f,
-        5.0f, 0.0f, -5.0f,  1.0f, 0.0f,
-        5.0f, 0.0f,  5.0f,  1.0f, 1.0f,
-        -5.0f, 0.0f,  5.0f,  0.0f, 1.0f
-    };
+  GLfloat floorVertices[] = {
+    -5.0f, 0.0f, -5.0f,  0.0f, 0.0f,
+    5.0f, 0.0f, -5.0f,  1.0f, 0.0f,
+    5.0f, 0.0f,  5.0f,  1.0f, 1.0f,
+    -5.0f, 0.0f,  5.0f,  0.0f, 1.0f
+  };
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), floorVertices);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), floorVertices+3);
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), floorVertices);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), floorVertices+3);
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
 
-    glDrawArrays(GL_QUADS, 0, 4);
+  glDrawArrays(GL_QUADS, 0, 4);
 
-    // Рендеринг стен
-    shader->getProgram()->setUniformValue("texture", 0);
-    glBindTexture(GL_TEXTURE_2D, wallTextureID);
+  // Рендеринг стен
+  shader->getProgram()->setUniformValue("texture", 0);
+  glBindTexture(GL_TEXTURE_2D, wallTextureID);
+  renderQuad(-1.0f, 0.0f, -1.0f, 2.0f, 2.0f); // Стена
 
-    GLfloat wallVertices[] = {
-        -1.0f, 0.0f, -1.0f,  0.0f, 0.0f,
-        1.0f, 0.0f, -1.0f,  1.0f, 0.0f,
-        1.0f, 2.0f, -1.0f,  1.0f, 1.0f,
-        -1.0f, 2.0f, -1.0f,  0.0f, 1.0f
-    };
+  // Рендеринг полок
+  shader->getProgram()->setUniformValue("texture", 0);
+  glBindTexture(GL_TEXTURE_2D, shelfTextureID);
+  renderQuad(-3.0f, 0.0f, -2.0f, 1.0f, 2.0f); // Полка слева
+  renderQuad(2.0f, 0.0f, -2.0f, 1.0f, 2.0f); // Полка справа
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), wallVertices);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), wallVertices+3);
-    glDrawArrays(GL_QUADS, 0, 4);
+  // Рендеринг кассы
+  glBindTexture(GL_TEXTURE_2D, counterTextureID);
+  renderQuad(-1.5f, 0.0f, -4.0f, 3.0f, 1.0f); // Касса
 }
+
+
+void Game::renderQuad(float x, float y, float z, float width, float height) {
+
+
+  GLfloat vertices[] = {
+    x, y, z, 0.0f, 0.0f, // Левый нижний угол
+    x + width, y, z, 1.0f, 0.0f, // Правый нижний угол
+    x + width, y + height, z, 1.0f, 1.0f, // Правый верхний угол
+    x, y + height, z, 0.0f, 1.0f // Левый верхний угол
+  };
+
+  // Установка данных вершин
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), vertices);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), vertices + 3);
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+
+  glDrawArrays(GL_QUADS, 0, 4); // Отрисовка квадрата
+}
+
+
+
 void Game::keyPressEvent(QKeyEvent *event) {
   float radYaw = qDegreesToRadians(cameraYaw); // Преобразуем угол в радианы
 
@@ -220,14 +246,27 @@ void Game::initEnvironmentalSystems() {
 }
 
 void Game::updateAmbience() {
-  // Обновление параметров окружения
   m_environment.update(3.0f); // Дельта-тайм 3 секунды
 
-  // Случайные звуковые эффекты
+         // Обновляем состояние игрока
+  if (m_playerState.isInDanger()) {
+      // Если игрок в опасности, увеличиваем уровень стресса
+      m_playerState.updateStress(10.0f);
+
+      // Воспроизводим звук биения сердца
+      auto heartbeatSound = m_soundEngine.generateHeartbeat(44100);
+      // Ваш метод воспроизведения звука
+    } else {
+      // Снижаем уровень стресса, если игрок не в опасности
+      m_playerState.updateStress(-5.0f);
+    }
+
+         // Случайные звуковые эффекты
   if(rand() % 100 < 15) { // 15% шанс каждые 3 сек
       auto creakSound = m_soundEngine.generateCreak(2205);
       // Ваш метод воспроизведения звука
     }
 }
+
 
 
