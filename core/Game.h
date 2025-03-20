@@ -38,7 +38,8 @@ class Game : public QOpenGLWidget, protected QOpenGLFunctions {
   void setupScene();
   void renderGame();
   void updatePlayerPosition();
-  void renderQuad(float x, float y, float z, float width, float height);
+  void renderQuadVertical(float x, float y, float z, float width, float height);
+  void renderQuadHorizontal(float x, float y, float z, float width, float height);
 
   void initEnvironmentalSystems();
   void updateAmbience();

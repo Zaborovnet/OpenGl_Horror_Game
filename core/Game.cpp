@@ -82,43 +82,30 @@ void Game::paintGL() {
 }
 
 void Game::renderGame() {
+
   // Рендеринг пола
   shader->getProgram()->setUniformValue("texture", 0);
   glBindTexture(GL_TEXTURE_2D, floorTextureID);
-
-  GLfloat floorVertices[] = {
-    -5.0f, 0.0f, -5.0f,  0.0f, 0.0f,
-    5.0f, 0.0f, -5.0f,  1.0f, 0.0f,
-    5.0f, 0.0f,  5.0f,  1.0f, 1.0f,
-    -5.0f, 0.0f,  5.0f,  0.0f, 1.0f
-  };
-
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), floorVertices);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), floorVertices+3);
-  glEnableVertexAttribArray(0);
-  glEnableVertexAttribArray(1);
-
-  glDrawArrays(GL_QUADS, 0, 4);
+  renderQuadHorizontal(-5.0f, 0.0f, -5.0f, 10.0f, 10.0f); // Стена
 
   // Рендеринг стен
   shader->getProgram()->setUniformValue("texture", 0);
   glBindTexture(GL_TEXTURE_2D, wallTextureID);
-  renderQuad(-1.0f, 0.0f, -1.0f, 2.0f, 2.0f); // Стена
+  renderQuadVertical(-1.0f, 0.0f, -1.0f, 2.0f, 2.0f); // Стена
 
   // Рендеринг полок
   shader->getProgram()->setUniformValue("texture", 0);
   glBindTexture(GL_TEXTURE_2D, shelfTextureID);
-  renderQuad(-3.0f, 0.0f, -2.0f, 1.0f, 2.0f); // Полка слева
-  renderQuad(2.0f, 0.0f, -2.0f, 1.0f, 2.0f); // Полка справа
+  renderQuadVertical(-3.0f, 0.0f, -2.0f, 1.0f, 2.0f); // Полка слева
+  renderQuadVertical(2.0f, 0.0f, -2.0f, 1.0f, 2.0f); // Полка справа
 
   // Рендеринг кассы
   glBindTexture(GL_TEXTURE_2D, counterTextureID);
-  renderQuad(-1.5f, 0.0f, -4.0f, 3.0f, 1.0f); // Касса
+  renderQuadVertical(-1.5f, 0.0f, -4.0f, 3.0f, 1.0f); // Касса
 }
 
 
-void Game::renderQuad(float x, float y, float z, float width, float height) {
-
+void Game::renderQuadVertical(float x, float y, float z, float width, float height) {
 
   GLfloat vertices[] = {
     x, y, z, 0.0f, 0.0f, // Левый нижний угол
@@ -136,6 +123,23 @@ void Game::renderQuad(float x, float y, float z, float width, float height) {
   glDrawArrays(GL_QUADS, 0, 4); // Отрисовка квадрата
 }
 
+void Game:: renderQuadHorizontal(float x, float y, float z, float width, float height){
+
+  GLfloat vertices[] = {
+    x, y, z, 0.0f, 0.0f, // Левый нижний угол
+    x + width, y, z, 1.0f, 0.0f, // Правый нижний угол
+    x + width, y, z+ height, 1.0f, 1.0f, // Правый верхний угол
+    x, y , z+ height, 0.0f, 1.0f // Левый верхний угол
+  };
+
+   // Установка данных вершин
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), vertices);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), vertices + 3);
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+
+  glDrawArrays(GL_QUADS, 0, 4); // Отрисовка квадрата
+}
 
 
 void Game::keyPressEvent(QKeyEvent *event) {
@@ -166,8 +170,8 @@ void Game::keyPressEvent(QKeyEvent *event) {
     break;
   case Qt::Key_Space: // Прыжок
     if (isOnGround) {
-      verticalSpeed = 0.5f; // Начальная скорость прыжка
-      isOnGround = false; // Игрок не на земле
+    verticalSpeed = 0.5f; // Начальная скорость прыжка
+    isOnGround = false; // Игрок не на земле
     }
     break;
   }
